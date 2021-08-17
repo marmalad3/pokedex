@@ -35,7 +35,7 @@ func TestApiClientWithClient(t *testing.T) {
 	assert.Equal(t, httpClient, apiClient.client)
 }
 
-func TestApiClientFetchPokemon(t *testing.T) {
+func TestApiClientFetchPokemonSuccess(t *testing.T) {
 
 	inputPokemon := apiResponse{
 		Names: []*nameInLanguage{
@@ -75,4 +75,24 @@ func TestApiClientFetchPokemon(t *testing.T) {
 	assert.Equal(t, inputPokemon.Descriptions[0].Description, foundPokemon.Description)
 	assert.Equal(t, inputPokemon.Habitat.Name, foundPokemon.Habitat)
 	assert.Equal(t, inputPokemon.IsLegendary, foundPokemon.IsLegendary)
+}
+
+func TestApiClientFetchPokemonNotFound(t *testing.T) {
+
+	httpClient := &http.Client{}
+	httpClient.Transport = getMockRoundTripper(t, []byte(`Not found`), http.StatusNotFound)
+
+	apiClient := NewApiClient(WithHTTPClient(httpClient))
+
+	foundPokemon, err := apiClient.GetPokemon(context.Background(), "Oddish", "en")
+	assert.Nil(t, foundPokemon)
+
+	assert.NotNil(t, err)
+
+	assert.IsType(t, &ApiError{}, err)
+
+	castErr, ok := err.(*ApiError)
+	assert.True(t, ok)
+	assert.Equal(t, http.StatusNotFound, castErr.StatusCode)
+	assert.Equal(t, "Status '404' returned from server", err.Error())
 }

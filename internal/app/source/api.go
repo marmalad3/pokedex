@@ -100,33 +100,59 @@ func (ar *apiResponse) mapToModelForLanguage(lang string) *models.Pokemon {
 	return pokemon
 }
 
-// GetPokemon returns calls the PokeAPI.co server and parses out requested  data
-func (ac *ApiClient) GetPokemon(ctx context.Context, name string, language string) (*models.Pokemon, error) {
+type ApiError struct {
+	StatusCode int
+}
 
-	req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s/pokemon-species/%s", ac.baseUrl, name), nil)
+func (ae *ApiError) Error() string {
+	return fmt.Sprintf("Status '%d' returned from server", ae.StatusCode)
+}
+
+func (ae *ApiError) IsRetryable() bool {
+	return ae.StatusCode >= 500
+}
+
+func (ac *ApiClient) doRequest(ctx context.Context, path string, responseObj interface{}) error {
+
+	req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s/%s", ac.baseUrl, path), nil)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// TODO retries
 
 	resp, err := ac.client.Do(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer resp.Body.Close()
 
-	// TODO check status codes for error handling
+	if resp.StatusCode >= 400 {
+		return &ApiError{
+			StatusCode: resp.StatusCode,
+		}
+	}
 
 	payload, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(payload, &responseObj); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// GetPokemon returns calls the PokeAPI.co server and parses out requested  data
+func (ac *ApiClient) GetPokemon(ctx context.Context, name string, language string) (*models.Pokemon, error) {
+	var responseObj *apiResponse
+	err := ac.doRequest(ctx, fmt.Sprintf("pokemon-species/%s", name), &responseObj)
 	if err != nil {
 		return nil, err
 	}
 
-	var responseObj *apiResponse
-	if err = json.Unmarshal(payload, &responseObj); err != nil {
-		return nil, err
-	}
 	return responseObj.mapToModelForLanguage(language), nil
 
 }
