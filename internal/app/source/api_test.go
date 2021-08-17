@@ -73,7 +73,7 @@ func TestApiClientFetchPokemonSuccess(t *testing.T) {
 	assert.Equal(t, inputPokemon.Names[0].Name, foundPokemon.Name)
 	assert.Equal(t, inputPokemon.Descriptions[0].Description, foundPokemon.Description)
 	assert.Equal(t, inputPokemon.Habitat.Name, foundPokemon.Habitat)
-	assert.Equal(t, inputPokemon.IsLegendary, foundPokemon.IsLegendary)
+	assert.Equal(t, inputPokemon.IsLegendary, *foundPokemon.IsLegendary)
 }
 
 func TestApiClientFetchPokemonNotFound(t *testing.T) {
@@ -154,5 +154,5 @@ func TestApiClientFetchPokemonSuccessLangNotFound(t *testing.T) {
 	assert.Equal(t, "", foundPokemon.Name)
 	assert.Equal(t, "", foundPokemon.Description)
 	assert.Equal(t, inputPokemon.Habitat.Name, foundPokemon.Habitat)
-	assert.Equal(t, inputPokemon.IsLegendary, foundPokemon.IsLegendary)
+	assert.Equal(t, inputPokemon.IsLegendary, *foundPokemon.IsLegendary)
 }

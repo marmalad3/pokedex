@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/IyadAssaf/poke/internal/app/models"
+	"github.com/IyadAssaf/poke/internal/app/pokedex/models"
 )
 
 // GetPokemonNameReader is a Reader for the GetPokemonName structure.
@@ -29,6 +29,18 @@ func (o *GetPokemonNameReader) ReadResponse(response runtime.ClientResponse, con
 			return nil, err
 		}
 		return result, nil
+	case 404:
+		result := NewGetPokemonNameNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewGetPokemonNameInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -62,6 +74,48 @@ func (o *GetPokemonNameOK) readResponse(response runtime.ClientResponse, consume
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewGetPokemonNameNotFound creates a GetPokemonNameNotFound with default headers values
+func NewGetPokemonNameNotFound() *GetPokemonNameNotFound {
+	return &GetPokemonNameNotFound{}
+}
+
+/* GetPokemonNameNotFound describes a response with status code 404, with default header values.
+
+Not found
+*/
+type GetPokemonNameNotFound struct {
+}
+
+func (o *GetPokemonNameNotFound) Error() string {
+	return fmt.Sprintf("[GET /pokemon/{name}][%d] getPokemonNameNotFound ", 404)
+}
+
+func (o *GetPokemonNameNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewGetPokemonNameInternalServerError creates a GetPokemonNameInternalServerError with default headers values
+func NewGetPokemonNameInternalServerError() *GetPokemonNameInternalServerError {
+	return &GetPokemonNameInternalServerError{}
+}
+
+/* GetPokemonNameInternalServerError describes a response with status code 500, with default header values.
+
+Server error
+*/
+type GetPokemonNameInternalServerError struct {
+}
+
+func (o *GetPokemonNameInternalServerError) Error() string {
+	return fmt.Sprintf("[GET /pokemon/{name}][%d] getPokemonNameInternalServerError ", 500)
+}
+
+func (o *GetPokemonNameInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

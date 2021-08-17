@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/IyadAssaf/poke/internal/app/models"
+	"github.com/IyadAssaf/poke/internal/app/pokedex/models"
 )
 
 var defaultBaseUrl, _ = url.Parse("https://pokeapi.co/api/v2/")
@@ -58,27 +58,33 @@ type apiResponse struct {
 	Habitat      habitat                  `json:"habitat"`
 }
 
+// nameInLanguage returns a pokemon name with a language definition
 type nameInLanguage struct {
 	Language languageDefinition `json:"language"`
 	Name     string             `json:"name"`
 }
 
+// descriptionInLanguage returns a pokemon name with a language definition
 type descriptionInLanguage struct {
 	Language    languageDefinition `json:"language"`
-	Description string             `json:"flavour_text"`
+	Description string             `json:"flavor_text"`
 }
 
+// languageDefinition defines a language name
 type languageDefinition struct {
 	Name string `json:"name"`
 }
 
+// habitat defines the pokemon's habitat
 type habitat struct {
 	Name string `json:"name"`
 }
 
+// mapToModelForLanguage maps the PokeAPI response to the external models.Pokemon
+// based on a language code
 func (ar *apiResponse) mapToModelForLanguage(lang string) *models.Pokemon {
 	pokemon := &models.Pokemon{
-		IsLegendary: ar.IsLegendary,
+		IsLegendary: &ar.IsLegendary,
 		Habitat:     ar.Habitat.Name,
 	}
 
@@ -98,18 +104,22 @@ func (ar *apiResponse) mapToModelForLanguage(lang string) *models.Pokemon {
 	return pokemon
 }
 
+// ApiError is returned when a 4xx+ status code is returned
 type ApiError struct {
 	StatusCode int
 }
 
+// Error returns an error string
 func (ae *ApiError) Error() string {
 	return fmt.Sprintf("Status '%d' returned from server", ae.StatusCode)
 }
 
+// IsRetryable returns true if a request can be retried
 func (ae *ApiError) IsRetryable() bool {
 	return ae.StatusCode >= 500
 }
 
+// doRequest sends a request to the source API and parses the response
 func (ac *ApiClient) doRequest(ctx context.Context, path string, responseObj interface{}) error {
 
 	req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s/%s", ac.baseUrl, path), nil)
@@ -148,7 +158,5 @@ func (ac *ApiClient) GetPokemon(ctx context.Context, name string, language strin
 	if err != nil {
 		return nil, err
 	}
-
 	return responseObj.mapToModelForLanguage(language), nil
-
 }

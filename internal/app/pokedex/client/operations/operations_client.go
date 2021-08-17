@@ -32,6 +32,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	GetPokemonName(params *GetPokemonNameParams, opts ...ClientOption) (*GetPokemonNameOK, error)
 
+	GetPokemonTranslatedName(params *GetPokemonTranslatedNameParams, opts ...ClientOption) (*GetPokemonTranslatedNameOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -70,6 +72,44 @@ func (a *Client) GetPokemonName(params *GetPokemonNameParams, opts ...ClientOpti
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for GetPokemonName: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  GetPokemonTranslatedName returns a pokemon by name with a translated description
+*/
+func (a *Client) GetPokemonTranslatedName(params *GetPokemonTranslatedNameParams, opts ...ClientOption) (*GetPokemonTranslatedNameOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetPokemonTranslatedNameParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetPokemonTranslatedName",
+		Method:             "GET",
+		PathPattern:        "/pokemon/translated/{name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &GetPokemonTranslatedNameReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetPokemonTranslatedNameOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetPokemonTranslatedName: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

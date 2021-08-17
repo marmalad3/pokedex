@@ -8,8 +8,10 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Pokemon pokemon
@@ -24,7 +26,8 @@ type Pokemon struct {
 	Habitat string `json:"habitat,omitempty"`
 
 	// is legendary
-	IsLegendary bool `json:"isLegendary,omitempty"`
+	// Required: true
+	IsLegendary *bool `json:"isLegendary"`
 
 	// name
 	Name string `json:"name,omitempty"`
@@ -32,6 +35,24 @@ type Pokemon struct {
 
 // Validate validates this pokemon
 func (m *Pokemon) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateIsLegendary(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Pokemon) validateIsLegendary(formats strfmt.Registry) error {
+
+	if err := validate.Required("isLegendary", "body", m.IsLegendary); err != nil {
+		return err
+	}
+
 	return nil
 }
 

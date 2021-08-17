@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 
 	"github.com/IyadAssaf/poke/internal/app/source"
@@ -15,10 +15,31 @@ func GetOnePokemonHandler(w http.ResponseWriter, r *http.Request) {
 
 	pokemonName := vars["name"]
 
-	fmt.Println("pokmon name", pokemonName)
-
 	client := source.NewApiClient()
-	client.GetPokemon(r.Context(), pokemonName, defaultLanguage)
+	pokemon, err := client.GetPokemon(r.Context(), pokemonName, defaultLanguage)
 
-	w.WriteHeader(http.StatusOK)
+	if err != nil {
+		castErr, ok := err.(*source.ApiError)
+		if !ok {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		switch castErr.StatusCode {
+		case http.StatusNotFound:
+			w.WriteHeader(http.StatusNotFound)
+			return
+		default:
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	}
+
+	b, err := json.Marshal(pokemon)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	w.Write(b)
 }

@@ -18,16 +18,38 @@ paths:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/Pokemon'
-
+            $ref: '#/definitions/Pokemon'  
+        404:
+          description: Not found
+        500:
+          description: Server error
+  /pokemon/translated/{name}:
+    get:
+      summary: Returns a pokemon by name with a translated description
+      parameters:
+        - in: path
+          name: name
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Pokemon'  
+        404:
+          description: Not found
+        500:
+          description: Server error
 definitions:
   Pokemon:
     type: object
+    required:
+      - isLegendary
     properties:
       name:
         type: string
       description:
-        type: string
+        type: string        
       isLegendary:
         type: boolean
       habitat:
