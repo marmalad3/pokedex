@@ -36,7 +36,6 @@ func TestApiClientWithClient(t *testing.T) {
 }
 
 func TestApiClientFetchPokemonSuccess(t *testing.T) {
-
 	inputPokemon := apiResponse{
 		Names: []*nameInLanguage{
 			{
@@ -78,7 +77,6 @@ func TestApiClientFetchPokemonSuccess(t *testing.T) {
 }
 
 func TestApiClientFetchPokemonNotFound(t *testing.T) {
-
 	httpClient := &http.Client{}
 	httpClient.Transport = getMockRoundTripper(t, []byte(`Not found`), http.StatusNotFound)
 
@@ -95,4 +93,66 @@ func TestApiClientFetchPokemonNotFound(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, http.StatusNotFound, castErr.StatusCode)
 	assert.Equal(t, "Status '404' returned from server", err.Error())
+	assert.False(t, castErr.IsRetryable())
+}
+
+func TestApiClientFetchPokemonServerError(t *testing.T) {
+	httpClient := &http.Client{}
+	httpClient.Transport = getMockRoundTripper(t, []byte(`Internal server error`), http.StatusInternalServerError)
+
+	apiClient := NewApiClient(WithHTTPClient(httpClient))
+
+	foundPokemon, err := apiClient.GetPokemon(context.Background(), "Oddish", "en")
+	assert.Nil(t, foundPokemon)
+
+	assert.NotNil(t, err)
+	assert.IsType(t, &ApiError{}, err)
+
+	castErr, ok := err.(*ApiError)
+	assert.True(t, ok)
+	assert.Equal(t, http.StatusInternalServerError, castErr.StatusCode)
+	assert.Equal(t, "Status '500' returned from server", err.Error())
+
+	assert.True(t, castErr.IsRetryable())
+}
+
+func TestApiClientFetchPokemonSuccessLangNotFound(t *testing.T) {
+	inputPokemon := apiResponse{
+		Names: []*nameInLanguage{
+			{
+				Language: languageDefinition{
+					Name: "fr",
+				},
+				Name: "Mystherbe",
+			},
+		},
+		Descriptions: []*descriptionInLanguage{
+			{
+				Language: languageDefinition{
+					Name: "fr",
+				},
+				Description: "Oddish est une plante d'intérieur qui aime un arrosage régulier et une brumisation occasionnelle",
+			},
+		},
+		IsLegendary: true,
+		Habitat: habitat{
+			Name: "Iyad's living room",
+		},
+	}
+
+	respPayload, err := json.Marshal(inputPokemon)
+	assert.Nil(t, err)
+
+	httpClient := &http.Client{}
+	httpClient.Transport = getMockRoundTripper(t, respPayload, http.StatusOK)
+
+	apiClient := NewApiClient(WithHTTPClient(httpClient))
+
+	foundPokemon, err := apiClient.GetPokemon(context.Background(), "Oddish", "en")
+	assert.Nil(t, err)
+
+	assert.Equal(t, "", foundPokemon.Name)
+	assert.Equal(t, "", foundPokemon.Description)
+	assert.Equal(t, inputPokemon.Habitat.Name, foundPokemon.Habitat)
+	assert.Equal(t, inputPokemon.IsLegendary, foundPokemon.IsLegendary)
 }

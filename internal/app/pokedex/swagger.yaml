@@ -1,0 +1,34 @@
+swagger: "2.0"
+info:
+  title: Pokemon API
+  version: 0.1.0
+basePath: /
+schemes:
+  - http
+paths:
+  /pokemon/{name}:
+    get:
+      summary: Returns a pokemon by name
+      parameters:
+        - in: path
+          name: name
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Pokemon'
+
+definitions:
+  Pokemon:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      isLegendary:
+        type: boolean
+      habitat:
+        type: string

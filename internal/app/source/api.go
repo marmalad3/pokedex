@@ -95,8 +95,6 @@ func (ar *apiResponse) mapToModelForLanguage(lang string) *models.Pokemon {
 		}
 	}
 
-	// TODO consider what to do if name or desription isn't found
-
 	return pokemon
 }
 
@@ -118,8 +116,6 @@ func (ac *ApiClient) doRequest(ctx context.Context, path string, responseObj int
 	if err != nil {
 		return err
 	}
-
-	// TODO retries
 
 	resp, err := ac.client.Do(req)
 	if err != nil {
