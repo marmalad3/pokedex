@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/IyadAssaf/poke/internal/app/pokedex"
 )
@@ -19,10 +18,8 @@ func main() {
 	}
 
 	srv := &http.Server{
-		Handler:      r,
-		Addr:         fmt.Sprintf("127.0.0.1:%s", port),
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
+		Handler: r,
+		Addr:    fmt.Sprintf("127.0.0.1:%s", port),
 	}
 
 	log.Fatal(srv.ListenAndServe())
