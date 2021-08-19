@@ -91,7 +91,7 @@ func (ae *ApiError) Error() string {
 
 // IsRetryable returns true if a request can be retried
 func (ae *ApiError) IsRetryable() bool {
-	return ae.StatusCode >= 500
+	return ae.StatusCode >= http.StatusInternalServerError
 }
 
 // doRequest sends a request to the source API and parses the response

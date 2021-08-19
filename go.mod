@@ -11,4 +11,5 @@ require (
 	github.com/google/go-cmp v0.5.0 // indirect
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.7.0
+	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4 // indirect
 )
