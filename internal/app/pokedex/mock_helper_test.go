@@ -7,8 +7,8 @@ import (
 	"github.com/marmalad3/pokemon/internal/app/sources"
 	"github.com/marmalad3/pokemon/internal/app/sources/baseapi"
 	"github.com/marmalad3/pokemon/internal/app/sources/pokeapi"
-	"github.com/marmalad3/pokemon/internal/app/sources/support"
 	"github.com/marmalad3/pokemon/internal/app/sources/translation"
+	"github.com/marmalad3/pokemon/internal/app/support"
 	"github.com/stretchr/testify/assert"
 )
 

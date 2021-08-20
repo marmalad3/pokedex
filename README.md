@@ -120,10 +120,10 @@ Tools required:
 - `internal/app/pokedex`: directory containing the implemntation of the pokedex application. This package contains the swagger definition, HTTP routing functionality and E2E server tests.
 - `internal/app/pokedex/handlers`: http handlers for the server
 - `internal/app/pokedex/client` & `internal/app/pokedex/models`: generated swagger code
-- `internal/app/pokedex/sources`: package allowing access to external APIs
-- `internal/app/pokedex/sources/baseapi`: base API client which others extend from
-- `internal/app/pokedex/sources/pokeapi` & `internal/app/pokedex/sources/translation`: external API integrations
-- `./internal/app/pokedex/sources/support`: test support functionality
+- `internal/app/sources`: package allowing access to external APIs
+- `internal/app/sources/baseapi`: base API client which others extend from
+- `internal/app/sources/pokeapi` & `internal/app/pokedex/translation`: external API integrations
+- `./internal/app/support`: test support functionality
 - `scripts`: helpful bash scripts
 - `vendor`: vendored dependencies
 - `.github/workflows`: github action definition to run docker tests

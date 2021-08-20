@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/marmalad3/pokemon/internal/app/pokedex/client/operations"
 	"github.com/marmalad3/pokemon/internal/app/pokedex/models"
-	"github.com/marmalad3/pokemon/internal/app/sources/support"
+	"github.com/marmalad3/pokemon/internal/app/support"
 	"github.com/stretchr/testify/assert"
 )
 
