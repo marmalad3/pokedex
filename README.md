@@ -58,9 +58,16 @@ Tools required:
 
 - The description returned from the PokeAPI has newline and tab characters. For the purpose of this excercise I haven't filtered them out since I don't know if this is desired.
 
+# CI
+
+- A simple github actions workflow was added to run tests. This can be extended to have many more helpful checks but has been kept simple for this excercise.
+
 # Layout
 
 ```
+├── .github
+│   └── workflows
+│       └── workflow.yml
 ├── Dockerfile
 ├── Makefile
 ├── README.md
@@ -119,4 +126,4 @@ Tools required:
 - `./internal/app/pokedex/sources/support`: test support functionality
 - `scripts`: helpful bash scripts
 - `vendor`: vendored dependencies
-
+- `.github/workflows`: github action definition to run docker tests
