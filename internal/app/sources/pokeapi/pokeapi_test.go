@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/IyadAssaf/poke/internal/app/sources/baseapi"
-	"github.com/IyadAssaf/poke/internal/app/sources/support"
+	"github.com/marmalad3/pokemon/internal/app/sources/baseapi"
+	"github.com/marmalad3/pokemon/internal/app/sources/support"
 	"github.com/stretchr/testify/assert"
 )
 

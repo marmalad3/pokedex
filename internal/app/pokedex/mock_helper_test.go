@@ -3,12 +3,12 @@ package pokedex
 import (
 	"testing"
 
-	"github.com/IyadAssaf/poke/internal/app/pokedex/models"
-	"github.com/IyadAssaf/poke/internal/app/sources"
-	"github.com/IyadAssaf/poke/internal/app/sources/baseapi"
-	"github.com/IyadAssaf/poke/internal/app/sources/pokeapi"
-	"github.com/IyadAssaf/poke/internal/app/sources/support"
-	"github.com/IyadAssaf/poke/internal/app/sources/translation"
+	"github.com/marmalad3/pokemon/internal/app/pokedex/models"
+	"github.com/marmalad3/pokemon/internal/app/sources"
+	"github.com/marmalad3/pokemon/internal/app/sources/baseapi"
+	"github.com/marmalad3/pokemon/internal/app/sources/pokeapi"
+	"github.com/marmalad3/pokemon/internal/app/sources/support"
+	"github.com/marmalad3/pokemon/internal/app/sources/translation"
 	"github.com/stretchr/testify/assert"
 )
 

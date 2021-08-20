@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/IyadAssaf/poke/internal/app/pokedex/handlers"
-	"github.com/IyadAssaf/poke/internal/app/sources"
 	"github.com/gorilla/mux"
+	"github.com/marmalad3/pokemon/internal/app/pokedex/handlers"
+	"github.com/marmalad3/pokemon/internal/app/sources"
 )
 
 // GetRouter requires source APIs to be provided as dependencies

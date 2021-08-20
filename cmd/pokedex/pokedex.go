@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/IyadAssaf/poke/internal/app/pokedex"
-	"github.com/IyadAssaf/poke/internal/app/sources"
-	"github.com/IyadAssaf/poke/internal/app/sources/pokeapi"
-	"github.com/IyadAssaf/poke/internal/app/sources/translation"
+	"github.com/marmalad3/pokemon/internal/app/pokedex"
+	"github.com/marmalad3/pokemon/internal/app/sources"
+	"github.com/marmalad3/pokemon/internal/app/sources/pokeapi"
+	"github.com/marmalad3/pokemon/internal/app/sources/translation"
 )
 
 const defaultPort = "5000"

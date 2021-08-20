@@ -49,3 +49,34 @@ func TestApiClientCustomHttpClient(t *testing.T) {
 
 	assert.Equal(t, customClient, apiClient.client)
 }
+
+func TestApiClientErrorIsRetryable(t *testing.T) {
+	cases := []struct {
+		statusCode        int
+		expectIsRetryable bool
+	}{
+		{
+			statusCode:        http.StatusNotFound,
+			expectIsRetryable: false,
+		},
+		{
+			statusCode:        http.StatusConflict,
+			expectIsRetryable: false,
+		},
+		{
+			statusCode:        http.StatusInternalServerError,
+			expectIsRetryable: true,
+		},
+		{
+			statusCode:        http.StatusGatewayTimeout,
+			expectIsRetryable: true,
+		},
+	}
+
+	for _, tc := range cases {
+		err := &ApiError{
+			StatusCode: tc.statusCode,
+		}
+		assert.Equal(t, tc.expectIsRetryable, err.IsRetryable())
+	}
+}

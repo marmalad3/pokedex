@@ -18,7 +18,8 @@ type ApiClientGenerator struct {
 	baseURLEnv     string
 }
 
-// GenerateNewAPIClient
+// GenerateNewAPIClient returns an ApiClientGenerator, for which
+// new API integration clients can be contructed from
 func GenerateNewAPIClient(defaultBaseUrl string, baseUrlEnv string) *ApiClientGenerator {
 	return &ApiClientGenerator{
 		defaultBaseURL: defaultBaseUrl,

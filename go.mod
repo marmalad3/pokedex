@@ -1,4 +1,4 @@
-module github.com/IyadAssaf/poke
+module github.com/marmalad3/pokemon
 
 go 1.16
 

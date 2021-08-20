@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/IyadAssaf/poke/internal/app/pokedex/models"
+	"github.com/marmalad3/pokemon/internal/app/pokedex/models"
 )
 
 // GetPokemonNameReader is a Reader for the GetPokemonName structure.

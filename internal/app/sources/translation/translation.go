@@ -5,9 +5,11 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/IyadAssaf/poke/internal/app/sources/baseapi"
+	"github.com/marmalad3/pokemon/internal/app/sources/baseapi"
 )
 
+// TranslationAPIClient is a client to integrate with
+// api.funtranslations.com
 type TranslationAPIClient struct {
 	*baseapi.ApiClient
 }
@@ -17,6 +19,10 @@ const (
 	defaultBaseUrl = "https://api.funtranslations.com/translate"
 )
 
+// NewTranslationAPIClient accepts baseapi.ApiClientOpt parameters to
+// configure the base URL and http.Client on a new TranslationAPIClient
+// instance.
+// An error will be returned if the base URL fails to be parsed
 func NewTranslationAPIClient(opts ...baseapi.ApiClientOpt) (*TranslationAPIClient, error) {
 	baseClient, err := baseapi.GenerateNewAPIClient(defaultBaseUrl, baseUrlEnvVar).NewApiClient(opts...)
 	if err != nil {

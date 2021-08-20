@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/IyadAssaf/poke/internal/app/pokedex/client/operations"
-	"github.com/IyadAssaf/poke/internal/app/pokedex/models"
-	"github.com/IyadAssaf/poke/internal/app/sources/support"
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+	"github.com/marmalad3/pokemon/internal/app/pokedex/client/operations"
+	"github.com/marmalad3/pokemon/internal/app/pokedex/models"
+	"github.com/marmalad3/pokemon/internal/app/sources/support"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -1,4 +1,6 @@
 #!/bin/bash
+# This script will generate swagger models & a HTTP client from the
+# ./internal/poke/swagger.yaml file
 
 set -ex
 

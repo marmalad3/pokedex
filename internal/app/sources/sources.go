@@ -1,8 +1,8 @@
 package sources
 
 import (
-	"github.com/IyadAssaf/poke/internal/app/sources/pokeapi"
-	"github.com/IyadAssaf/poke/internal/app/sources/translation"
+	"github.com/marmalad3/pokemon/internal/app/sources/pokeapi"
+	"github.com/marmalad3/pokemon/internal/app/sources/translation"
 )
 
 type ApiSources struct {

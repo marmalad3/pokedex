@@ -6,10 +6,11 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/IyadAssaf/poke/internal/app/pokedex/models"
-	"github.com/IyadAssaf/poke/internal/app/sources/baseapi"
+	"github.com/marmalad3/pokemon/internal/app/pokedex/models"
+	"github.com/marmalad3/pokemon/internal/app/sources/baseapi"
 )
 
+// PokeAPIClient is a client to integrate with pokeapi.co
 type PokeAPIClient struct {
 	*baseapi.ApiClient
 }
@@ -19,6 +20,10 @@ const (
 	defaultBaseUrl = "https://pokeapi.co/api/v2"
 )
 
+// NewPokeAPIClient accepts baseapi.ApiClientOpt parameters to
+// configure the base URL and http.Client on a new PokeAPIClient
+// instance.
+// An error will be returned if the base URL fails to be parsed
 func NewPokeAPIClient(opts ...baseapi.ApiClientOpt) (*PokeAPIClient, error) {
 	baseClient, err := baseapi.GenerateNewAPIClient(defaultBaseUrl, baseUrlEnvVar).NewApiClient(opts...)
 	if err != nil {

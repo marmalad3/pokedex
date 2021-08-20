@@ -14,19 +14,36 @@ $ curl curl http://localhost:5000/pokemon/oddish
 {"description":"During the day,\nit keeps its face\nburied in the\u000cground. At night,\nit wanders around\nsowing its seeds.","habitat":"grassland","isLegendary":false,"name":"Oddish"}
 ```
 
-### Running the tests
+## Running the tests
 
 Run the tests using docker
+
 ```
 $ make docker-run-tests
 ```
 
+## Local development
+
+Tools required:
+- make
+- go (tested on 1.17)
+- goimports (for code formatting)
+
+## To run tests:
+
+`make test`
+
+## To run locally:
+
+`make run`
+
 # Technology used
+
 - Docker to ensure the pokedex server runs in the same way regardless of the base environment
 - Swagger with [go-swagger](https://goswagger.io/) to generate server models and clients. The `swagger.yaml` file can be provided to downstream services to for documenation, easier integration and to help ensure the API interface is in sync.
 
-
 # Approach
+
 - Given that there are two APIs to be called, I created a base API client (./internal/app/sources/baseapi) to abstract common features. Clients are created by specifying default information, such as the default API url, in the `GenerateNewAPIClient(..)` method. 
 - Upstream API errors are handled in these clients by returning the `baseapi.ApiError{}` type, which can be used to inform retried requests using the `IsRetryable()` method. The `StatusCode` property can also be accessed by casting types if further detail is desired. 
 - API retries are not imlpemented in this example project, but my approach would be to use a back-off retry mechanism and a handler timeout if any upstream APIs are taking too long to respond.
@@ -37,12 +54,69 @@ $ make docker-run-tests
 - Translation logic is tested from the HTTP handler perspective. If the logic was more complicated I would move this to some more specific unit tests with more test data.
 - Dependencies have been vendored in the project. The main reason for this is to ensure that the build is still successful is a dependency becomes unavailable, from it's source or otherwise.
 
-## Development
-Tools required
-- make
-- go (at least 1.16)
-- goimports (for code formatting)
+# Other considerations
 
-To run tests:
+- The description returned from the PokeAPI has newline and tab characters. For the purpose of this excercise I haven't filtered them out since I don't know if this is desired.
 
-`make test`
+# Layout
+
+```
+├── Dockerfile
+├── Makefile
+├── README.md
+├── cmd
+│   └── pokedex
+│       └── pokedex.go
+├── go.mod
+├── go.sum
+├── internal
+│   └── app
+│       ├── pokedex
+│       │   ├── client
+│       │   │   ├── operations
+│       │   │   │   ├── get_pokemon_name_parameters.go
+│       │   │   │   ├── get_pokemon_name_responses.go
+│       │   │   │   ├── get_pokemon_translated_name_parameters.go
+│       │   │   │   ├── get_pokemon_translated_name_responses.go
+│       │   │   │   └── operations_client.go
+│       │   │   └── pokemon_api_client.go
+│       │   ├── handlers
+│       │   │   ├── errors.go
+│       │   │   └── pokemon_handler.go
+│       │   ├── models
+│       │   │   └── pokemon.go
+│       │   ├── mock_helper_test.go
+│       │   ├── get_pokemon_test.go
+│       │   ├── get_translated_pokemon_test.go
+│       │   ├── router.go
+│       │   └── swagger.yaml
+│       └── sources
+│           ├── baseapi
+│           │   ├── api.go
+│           │   └── api_test.go
+│           ├── pokeapi
+│           │   ├── pokeapi.go
+│           │   └── pokeapi_test.go
+│           ├── sources.go
+│           ├── support
+│           │   ├── mock_client.go
+│           │   └── types.go
+│           └── translation
+│               ├── translation.go
+│               └── translation_test.go
+├── pokedex
+└── scripts
+    └── generate-swagger.sh
+```
+
+- `cmd/pokedex`: root the application, building will produce the server binary
+- `internal/app/pokedex`: directory containing the implemntation of the pokedex application. This package contains the swagger definition, HTTP routing functionality and E2E server tests.
+- `internal/app/pokedex/handlers`: http handlers for the server
+- `internal/app/pokedex/client` & `internal/app/pokedex/models`: generated swagger code
+- `internal/app/pokedex/sources`: package allowing access to external APIs
+- `internal/app/pokedex/sources/baseapi`: base API client which others extend from
+- `internal/app/pokedex/sources/pokeapi` & `internal/app/pokedex/sources/translation`: external API integrations
+- `./internal/app/pokedex/sources/support`: test support functionality
+- `scripts`: helpful bash scripts
+- `vendor`: vendored dependencies
+

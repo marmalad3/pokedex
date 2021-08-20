@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/IyadAssaf/poke/internal/app/pokedex/models"
-	"github.com/IyadAssaf/poke/internal/app/sources"
-	"github.com/IyadAssaf/poke/internal/app/sources/baseapi"
 	"github.com/gorilla/mux"
+	"github.com/marmalad3/pokemon/internal/app/pokedex/models"
+	"github.com/marmalad3/pokemon/internal/app/sources"
+	"github.com/marmalad3/pokemon/internal/app/sources/baseapi"
 )
 
 const defaultLanguage = "en"
