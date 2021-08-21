@@ -62,7 +62,9 @@ Tools required:
 
 - A simple github actions workflow was added to run tests. This can be extended to have many more helpful checks but has been kept simple for this excercise.
 
-# Layout
+
+# Layout
+
 
 ```
 ├── .github
