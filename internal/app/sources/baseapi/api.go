@@ -27,7 +27,7 @@ func GenerateNewAPIClient(defaultBaseUrl string, baseUrlEnv string) *ApiClientGe
 	}
 }
 
-// ApiClient interfaces with the PokeAPI.co REST API
+// ApiClient interfaces with the a source API
 type ApiClient struct {
 	client  *http.Client
 	baseUrl *url.URL
@@ -66,7 +66,7 @@ func WithHTTPClient(c *http.Client) ApiClientOpt {
 	}
 }
 
-// WithBaseURL is a functional param for setting a base URL for the poke API
+// WithBaseURL is a functional param for setting a base URL for the base API
 func WithBaseURL(u string) ApiClientOpt {
 	return func(as *ApiClient) error {
 
